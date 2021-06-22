@@ -1,7 +1,5 @@
-Options -Multiviews
-
-RewriteEngine On
-RewriteCond ${REQUEST_FILENAME} -!d
-RewriteCond ${REQUEST_FILENAME} -!f
-RewriteRule ^([0-9]+)$ index.php?url=$1 [QSA,L]
-RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+Options +SymLinksIfOwnerMatch 
+RewriteEngine On 
+RewriteCond %{REQUEST_FILENAME} !-f 
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?url=$1 [L]

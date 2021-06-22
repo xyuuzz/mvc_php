@@ -4,11 +4,11 @@
 
 class App 
 {
-    protected $controller = "Home", $method = "index", $params = [];
+    protected $controller = "HomeController", $method = "index", $params = [];
 
     public function __construct()
     {
-        $url = $this->parseURL();
+        $url = $this->parseURL() ?? [$this->controller]; # jika tidak ada parameter pada url, maka isi url dengan array yang hanya mempunyai satu element yaitu property controller.
 
         // class
         if(file_exists(__DIR__ . "/../controllers/" . $url[0] . ".php")) # jika element pertama url ada file controller
@@ -49,13 +49,17 @@ class App
             $url = rtrim($_GET["url"], "/"); // menghapus tanda / dibagian akhir
             $url = filter_var($url, FILTER_SANITIZE_URL); // untuk memfilter url dari hal hal yang berbahaya
             $url = explode("/", $url); // memecah url menjadi sebuah array
-            
+
             // ! jika yang url nya tidak mengirimkan parameter apapun, maka $url akan berisi array yang memiliki satu element yaitu string kosong ("") atau bernilai false
-            // * untuk membuat element pertama dari url/ nama class, dari yang huruf depan nya kecil, menjadi besar 
-            if(strlen($url[0])) 
+            // * untuk membuat element pertama dari url/ nama class, dari yang huruf depan nya kecil, menjadi besar
+            if($url)
             {
-                $url[0][0] = strtoupper($url[0][0]);
-            }
+                if(strlen($url[0])) 
+                {
+                    $url[0][0] = strtoupper($url[0][0]);
+                    $url[0] .= "Controller";
+                }
+            } 
 
             return $url;
         }
